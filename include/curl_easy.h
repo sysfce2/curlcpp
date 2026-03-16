@@ -296,12 +296,6 @@ namespace curl  {
 
         /* 55 = OBSOLETE */
 
-        /* DEPRECATED
-        * Function that will be called instead of the internal progress display
-        * function. This function should be defined as the curl_progress_callback
-        * prototype defines. */
-        CURLCPP_DEFINE_OPTION(CURLOPT_XFERINFOFUNCTION, curl_progress_callback);
-
         /* Data passed to the CURLOPT_PROGRESSFUNCTION and CURLOPT_XFERINFOFUNCTION
         callbacks */
         CURLCPP_DEFINE_OPTION(CURLOPT_PROGRESSDATA, void*);
@@ -850,6 +844,13 @@ namespace curl  {
         CURLCPP_DEFINE_OPTION(CURLOPT_SASL_IR, long);
 #endif
 
+        /* Options added in 7.32 */
+#if defined(LIBCURL_VERSION_NUM) && LIBCURL_VERSION_NUM >= 0x072000
+        /* Function that will be called instead of the internal progress display
+        * function. This function should be defined as the curl_xferinfo_callback
+        * prototype defines. (Deprecates CURLOPT_PROGRESSFUNCTION) */
+        CURLCPP_DEFINE_OPTION(CURLOPT_XFERINFOFUNCTION, curl_xferinfo_callback);
+#endif
 
         /* Options added in 7.33 */
 #if defined(LIBCURL_VERSION_NUM) && LIBCURL_VERSION_NUM >= 0x072100
