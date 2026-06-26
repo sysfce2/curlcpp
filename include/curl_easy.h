@@ -1084,7 +1084,7 @@ namespace curl  {
      * Result must be `curl_easy_info<void*>` despete the fact curl_easy_getinfo() takes a `char**` argument.
      * See https://curl.se/libcurl/c/CURLINFO_PRIVATE.html
      */
-    template<> curl_easy_info<void*> curl_easy::get_info<CURLINFO_PRIVATE>() const {
+    template<> inline curl_easy_info<void*> curl_easy::get_info<CURLINFO_PRIVATE>() const {
         char *val;
         const CURLcode code = curl_easy_getinfo(this->curl,CURLINFO_PRIVATE,&val);
         if (code != CURLE_OK) {
