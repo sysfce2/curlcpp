@@ -102,7 +102,7 @@ namespace curl  {
         // Content type from the Content-Type header.
         CURLCPP_DEFINE_INFO(CURLINFO_CONTENT_TYPE,char *);
         // User's private data pointer.
-        CURLCPP_DEFINE_INFO(CURLINFO_PRIVATE,char *);
+        CURLCPP_DEFINE_INFO(CURLINFO_PRIVATE,void *);
         // Avaiable HTTP authentication methods.
         CURLCPP_DEFINE_INFO(CURLINFO_HTTPAUTH_AVAIL,long);
         // Avaiable HTTP proxy authentication methods.
@@ -1076,6 +1076,21 @@ namespace curl  {
             throw curl_easy_exception(code,__FUNCTION__);
         }
         curl_easy_info<detail_info::Info_type<Info>> easy_info(val);
+        return easy_info;
+    }
+
+    /**
+     * Template specialization for CURLINFO_PRIVATE.
+     * Result must be `curl_easy_info<void*>` despete the fact curl_easy_getinfo() takes a `char**` argument.
+     * See https://curl.se/libcurl/c/CURLINFO_PRIVATE.html
+     */
+    template<> inline curl_easy_info<void*> curl_easy::get_info<CURLINFO_PRIVATE>() const {
+        char *val;
+        const CURLcode code = curl_easy_getinfo(this->curl,CURLINFO_PRIVATE,&val);
+        if (code != CURLE_OK) {
+            throw curl_easy_exception(code,__FUNCTION__);
+        }
+        curl_easy_info<void*> easy_info(static_cast<void*>(val));
         return easy_info;
     }
 
